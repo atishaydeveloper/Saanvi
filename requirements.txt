@@ -6,3 +6,4 @@ langchain-google-genai
 sentence-transformers
 unstructured
 faiss-cpu
+gunicorn
