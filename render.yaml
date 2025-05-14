@@ -3,7 +3,7 @@ services:
     name: saanvi-chatbot
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python python_chatbot_api.py
+    startCommand: gunicorn wsgi:app
     envVars:
       - key: GOOGLE_API_KEY
         sync: false
