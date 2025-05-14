@@ -9,3 +9,4 @@ faiss-cpu
 gunicorn
 langchain-community
 twilio
+langchain-huggingface
