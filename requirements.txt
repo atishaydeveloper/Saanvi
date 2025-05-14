@@ -7,3 +7,4 @@ sentence-transformers
 unstructured
 faiss-cpu
 gunicorn
+langchain-community
