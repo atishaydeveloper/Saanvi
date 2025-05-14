@@ -108,5 +108,30 @@ def reset():
             return jsonify({"error": "Failed to delete FAISS index", "details": str(e)}), 500
     return jsonify({"message": "No FAISS index to delete."})
 
+from twilio.twiml.messaging_response import MessagingResponse
+
+@app.route("/whatsapp", methods=["POST"])
+def whatsapp_webhook():
+    incoming_msg = request.form.get("Body")
+    phone_number = request.form.get("From")
+
+    if not incoming_msg:
+        return "No message", 400
+
+    try:
+        bot_response = query_faiss(incoming_msg)
+
+        resp = MessagingResponse()
+        msg = resp.message()
+        msg.body(bot_response)
+        return str(resp)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        resp = MessagingResponse()
+        resp.message("Something went wrong. Please try again later.")
+        return str(resp)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
