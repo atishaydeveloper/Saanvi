@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import UnstructuredMarkdownLoader
 
 # Load environment variables
@@ -71,9 +71,10 @@ Saanvi's Response:
     return response.content
 
 # FAISS search + Gemini answer
+chunks = load_and_split_text(TEXT_FILE)
+db = get_or_create_faiss(chunks)
+
 def query_faiss(query):
-    chunks = load_and_split_text(TEXT_FILE)
-    db = get_or_create_faiss(chunks)
     docs = db.similarity_search(query, k=3)
     context = "\n\n".join([doc.page_content for doc in docs])
     return gemini_resp(context, query)
@@ -81,6 +82,11 @@ def query_faiss(query):
 # --- Flask API setup ---
 app = Flask(__name__)
 CORS(app)
+
+@app.route("/", methods=["GET"])
+def index():
+    return jsonify({"message": "Saanvi Chatbot is running!"}), 200
+
 
 @app.route("/chat", methods=["POST"])
 def chat():
