@@ -8,3 +8,4 @@ unstructured
 faiss-cpu
 gunicorn
 langchain-community
+twilio
